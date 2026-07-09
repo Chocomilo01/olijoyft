@@ -1,0 +1,66 @@
+import "./App.css";
+import Sidebar from "./Components/Sidebar";
+import Header from "./Components/Header";
+import NavHeader from "./Components/NavHeader";
+import Routing from "./Routes";
+import Login from "./Components/LoginAndRegister/Login";
+import About from "./Components/LoginAndRegister/About";
+
+import { UserContextProvider } from "./UserContext";
+import { CookiesProvider } from "react-cookie";
+import { Routes, Route, Navigate } from "react-router-dom";
+import StaffLogin from "./Components/LoginAndRegister/StaffLogin";
+function App() {
+  const token = localStorage.getItem("token");
+
+  return (
+    <CookiesProvider>
+      <UserContextProvider>
+        <Routes>
+          {/* PUBLIC ROUTES */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/staff-login" element={<StaffLogin />} />
+          {/* PROTECTED ROUTES */}
+          <Route
+            path="/*"
+            element={
+              token ? (
+                <div id="main-wrapper">
+                  <NavHeader />
+                  <Header />
+                  <Sidebar />
+
+                  <div className="content-body">
+                    <div className="container-fluid">
+                      <Routing />
+                    </div>
+                  </div>
+
+                  <div className="footer">
+                    <div className="copyright">
+                      <p>
+                        Copyright © 2026 Techmint Vision || Developed by{" "}
+                        <a
+                          href="https://techmint.africa/"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Techmint
+                        </a>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+        </Routes>
+      </UserContextProvider>
+    </CookiesProvider>
+  );
+}
+
+export default App;
