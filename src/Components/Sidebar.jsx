@@ -1,9 +1,9 @@
 import React from "react";
 
-const Sidebar = () => {
+const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   return (
     <div>
-      <div class="deznav">
+      <div className={`deznav ${sidebarOpen ? "show" : ""}`}>
         <div class="deznav-scroll">
           <ul class="metismenu" id="menu">
             <li class="menu-title">olj VISION</li>

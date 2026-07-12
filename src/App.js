@@ -5,12 +5,17 @@ import NavHeader from "./Components/NavHeader";
 import Routing from "./Routes";
 import Login from "./Components/LoginAndRegister/Login";
 import About from "./Components/LoginAndRegister/About";
+import React, { useState } from "react";
+
+
+
 
 import { UserContextProvider } from "./UserContext";
 import { CookiesProvider } from "react-cookie";
 import { Routes, Route, Navigate } from "react-router-dom";
 import StaffLogin from "./Components/LoginAndRegister/StaffLogin";
 function App() {
+   const [sidebarOpen, setSidebarOpen] = useState(false);
   const token = localStorage.getItem("token");
 
   return (
@@ -27,9 +32,17 @@ function App() {
             element={
               token ? (
                 <div id="main-wrapper">
-                  <NavHeader />
+                  <NavHeader
+                    sidebarOpen={sidebarOpen}
+                    setSidebarOpen={setSidebarOpen}
+                  />
+
                   <Header />
-                  <Sidebar />
+
+                  <Sidebar
+                    sidebarOpen={sidebarOpen}
+                    setSidebarOpen={setSidebarOpen}
+                  />
 
                   <div className="content-body">
                     <div className="container-fluid">

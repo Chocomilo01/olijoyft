@@ -1,24 +1,23 @@
 import React from "react";
-import { useNavigate } from 'react-router-dom';
 
-
-const NavHeader = () => {
-  const navigate = useNavigate();
-
-  const handleGoBack = () => {
-    navigate(-1); // This will go back to the previous page in the history
-  };
-
+const NavHeader = ({ sidebarOpen, setSidebarOpen }) => {
   return (
     <div>
-      <div class="nav-header">
-        <a href="/" class="brand-logo">
-         {/* <img src="./images/logo/logo.png" class="logo-abbr" alt="" /> */}
-         <img src="./images/logo/logofull.png" class="brand-title" alt="" />
+      <div className="nav-header">
+        <a href="/" className="brand-logo">
+          <img
+            src="./images/logo/logofull.png"
+            className="brand-title"
+            alt=""
+          />
         </a>
-        <div class="nav-control">
-          <div class="hamburger" onClick={handleGoBack}>
-            <span class="line">
+
+        <div className="nav-control">
+          <div
+            className="hamburger"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+          >
+            <span className="line">
               <svg
                 width="21"
                 height="20"

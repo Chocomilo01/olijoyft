@@ -32,6 +32,7 @@ const AddCustomer = () => {
   const [accountOfficer, setAccountOfficer] = useState("");
   const [loading, setLoading] = useState(false);
 
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -58,6 +59,7 @@ const AddCustomer = () => {
       accountOfficer: userss?.firstName,
       bvn: bvn,
       passport: "null",
+      accountOfficer: accountOfficer,
       officerIncharge: accountOfficer,
     };
     setLoading(true);
@@ -66,7 +68,7 @@ const AddCustomer = () => {
 
     const token = localStorage.getItem("token");
     try {
-      console.log("Officer before submit:", accountOfficer);
+      
       const response = await fetch(
         "https://olijoy.onrender.com/api/v1/customers",
         {
@@ -127,6 +129,7 @@ const AddCustomer = () => {
   // console.log("Filtered Officers:", filteredUsers);
 
   useEffect(() => {
+   
     const token = localStorage.getItem("token"); // Replace 'your_token_key' with the actual key you use to store the token
 
     fetch(`https://olijoy.onrender.com/api/v1/users/${cookies.userId}`, {
