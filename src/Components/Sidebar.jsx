@@ -4,7 +4,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   return (
     <div>
       <div className={`deznav ${sidebarOpen ? "show" : ""}`}>
-        <div class="deznav-scroll">
+        <div
+          class="deznav-scroll"
+          style={{
+            paddingTop: "100px",
+          }}
+        >
           <ul class="metismenu" id="menu">
             <li class="menu-title">olj VISION</li>
             <li>
