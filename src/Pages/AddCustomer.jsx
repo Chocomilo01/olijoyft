@@ -59,7 +59,6 @@ const AddCustomer = () => {
       accountOfficer: userss?.firstName,
       bvn: bvn,
       passport: "null",
-      accountOfficer: accountOfficer,
       officerIncharge: accountOfficer,
     };
     setLoading(true);
