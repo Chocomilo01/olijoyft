@@ -81,9 +81,11 @@ const LoanApplication = () => {
         return response.json();
       })
       .then((data) => {
-        console.log("Fetched Data:", data.data);
-        toast.success("Customer Fetched Successfully");
-        setCustomers(data.data);
+        console.log("FULL RESPONSE:", data);
+        console.log("CUSTOMERS:", data.data);
+        console.log("COUNT:", data.data?.length);
+
+        setCustomers(data.data || []);
       })
       .catch((error) => {
         console.log("Error fetching data: ", error);
@@ -196,15 +198,16 @@ const LoanApplication = () => {
                     <label class="form-label">Search and Select Customer</label>
                     <select
                       id="inputState"
-                      class="default-select form-control wide"
+                      className="form-control"
                       value={customerSelection}
                       onChange={(e) => setCustomerSelection(e.target.value)}
                     >
-                      <option selected>Select Customer</option>
-                      {customers.map((customer, index) => (
-                        <>
-                          <option value={customer._id}>{customer.name}</option>
-                        </>
+                      <option value="">Select Customer</option>
+
+                      {customers.map((customer) => (
+                        <option key={customer._id} value={customer._id}>
+                          {customer.name}
+                        </option>
                       ))}
                     </select>
                   </div>
@@ -266,7 +269,7 @@ const LoanApplication = () => {
                     <label class="form-label">Marital Status</label>
                     <select
                       id="inputState"
-                      class="default-select form-control wide"
+                      className="form-control"
                       value={maritalStatus}
                       onChange={(e) => setMaritalStatus(e.target.value)}
                     >
@@ -349,7 +352,7 @@ const LoanApplication = () => {
                     <label class="form-label">LOAN TENURE/DURATION</label>
                     <select
                       id="inputState"
-                      class="default-select form-control wide"
+                      className="form-control"
                       value={loanDuration}
                       onChange={(e) => setLoanDuration(e.target.value)}
                     >
@@ -408,7 +411,7 @@ const LoanApplication = () => {
                     <label class="form-label">REPAYMENT SCHEDULE</label>
                     <select
                       id="inputState"
-                      class="default-select form-control wide"
+                      className="form-control"
                       value={repaymentSchedule}
                       onChange={(e) => setRepaymentSchedule(e.target.value)}
                     >
@@ -440,7 +443,7 @@ const LoanApplication = () => {
                     <label class="form-label">Sex</label>
                     <select
                       id="inputState"
-                      class="default-select form-control wide"
+                      className="form-control"
                       value={guarantor1Sex}
                       onChange={(e) => setGuarantor1Sex(e.target.value)}
                     >
@@ -522,7 +525,7 @@ const LoanApplication = () => {
                     <label class="form-label">Sex</label>
                     <select
                       id="inputState"
-                      class="default-select form-control wide"
+                      className="form-control"
                       value={guarantor2Sex}
                       onChange={(e) => setGuarantor2Sex(e.target.value)}
                     >
