@@ -215,6 +215,7 @@ const AllTransactions = () => {
                             {item.choose}
                           </span>
                         </td>
+
                         <td>
                           {item.collectedBy === "" ||
                           item.collectedBy == null ? (
