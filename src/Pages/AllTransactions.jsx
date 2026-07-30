@@ -55,7 +55,10 @@ const AllTransactions = () => {
         return response.json();
       })
       .then((data) => {
-        const sortedTransactions = data.data?.reverse(); // Reverse the array to have the latest transaction first
+        console.log("Total transactions:", data.data.length);
+
+        const sortedTransactions = data.data.reverse();
+
         setAllTransactionsByCash(sortedTransactions);
         setDisplayedCustomers(sortedTransactions);
       })
