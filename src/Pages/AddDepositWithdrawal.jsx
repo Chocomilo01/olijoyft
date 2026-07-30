@@ -149,6 +149,11 @@ const AddDepositWithdrawal = () => {
     }
   };
   useEffect(() => {
+    const today = new Date().toISOString().split("T")[0];
+    setPaymentDate(today);
+  }, []);
+
+  useEffect(() => {
     fetch("https://olijoy.onrender.com/api/v1/users", {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -249,7 +254,8 @@ const AddDepositWithdrawal = () => {
                       type="date"
                       value={paymentDate}
                       onChange={(e) => setPaymentDate(e.target.value)}
-                      class="form-control"
+                      className="form-control"
+                      disabled={user?.roles !== "superAdmin"}
                     />
                   </div>
                   <div class="mb-3 col-md-12">
