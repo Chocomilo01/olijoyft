@@ -39,26 +39,31 @@ const AddCustomer = () => {
     const formData = {
       name: accountHolderName,
       dateOfBirth: dob,
-      occupation: occupation,
-      placeOfBirth: placeOfBirth,
-      sex: sex,
-      phone: phone,
+      occupation,
+      placeOfBirth,
+      sex,
+      phone,
       customersPhoneNo: phone,
-      maritalStatus: maritalStatus,
-      spouseName: spouseName,
+      maritalStatus,
+      spouseName,
       spousePhoneNo: spousePhone,
       meansOfIdentification: identificationMeans,
       meansOfIdentificationNumber: idNumber,
-      bankName: bankName,
-      bankAccountNo: bankAccountNo,
-      bankAccountName: bankAccountName,
-      nextOfKin: nextOfKin,
-      nextOfKinPhone: nextOfKinPhone,
+      bankName,
+      bankAccountNo,
+      bankAccountName,
+      nextOfKin,
+      nextOfKinPhone,
       homeAddress: contactAddress,
-      contactAddress: contactAddress,
-      accountOfficer: userss?.firstName,
-      bvn: bvn,
+      contactAddress,
+      bvn,
       passport: "null",
+
+      // Logged-in user
+      accountOfficer:
+        `${userss?.firstName || ""} ${userss?.lastName || ""}`.trim(),
+
+      // Selected officer
       officerIncharge: accountOfficer,
     };
     setLoading(true);
@@ -67,7 +72,9 @@ const AddCustomer = () => {
 
     const token = localStorage.getItem("token");
     try {
-      
+      console.log("Logged In User:", userss);
+      console.log("Selected Officer:", accountOfficer);
+      console.log("Sending:", formData);
       const response = await fetch(
         "https://olijoy.onrender.com/api/v1/customers",
         {
@@ -101,6 +108,7 @@ const AddCustomer = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token"); // Replace 'your_token_key' with the actual key you use to store the token
+    
 
     fetch("https://olijoy.onrender.com/api/v1/users", {
       headers: {
@@ -391,20 +399,17 @@ const AddCustomer = () => {
 
                       <select
                         value={accountOfficer}
-                        onChange={(e) => {
-                          alert(e.target.value);
-                          setAccountOfficer(e.target.value);
-                        }}
-                        style={{ width: "100%", padding: "10px" }}
+                        onChange={(e) => setAccountOfficer(e.target.value)}
+                        className="form-control"
                       >
                         <option value="">Select One</option>
 
                         {filteredUsers.map((item) => (
                           <option
                             key={item._id}
-                            value={`${item.firstName} ${item.lastName}`}
+                            value={`${item.firstName || ""} ${item.lastName || ""}`.trim()}
                           >
-                            {item.firstName} {item.lastName}
+                            {`${item.firstName || ""} ${item.lastName || ""}`.trim()}
                           </option>
                         ))}
                       </select>
