@@ -176,13 +176,10 @@ const StaffLogin = () => {
                 onChange={(e) => setRole(e.target.value)}
               >
                 <option value="">Select Role</option>
-
                 <option value="superAdmin">Super Admin</option>
-
-                <option value="accountManager">Account Officer</option>
-
-                <option value="assistantManager">Assistant Manager</option>
-
+                <option value="manager">Manager</option>
+                <option value="accountManager">Account Manager</option>
+                <option value="accountOfficer">Account Officer</option>
                 <option value="dpo">DPO</option>
               </select>
             </div>
