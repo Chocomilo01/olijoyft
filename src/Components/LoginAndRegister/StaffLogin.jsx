@@ -20,6 +20,11 @@ const StaffLogin = () => {
     setLoading(true);
 
     try {
+      console.log({
+        email,
+        password,
+        roles: role,
+      });
       const response = await fetch(
         "https://olijoy.onrender.com/api/v1/users/login",
         {
@@ -36,12 +41,17 @@ const StaffLogin = () => {
       );
 
       const data = await response.json();
+      console.log("Status:", response.status);
+      console.log("Response:", data);
 
       if (response.ok) {
         toast.success("Login Successful");
 
         localStorage.setItem("token", data.data.token);
-        localStorage.setItem("username", data.data.user.fullName);
+       localStorage.setItem(
+  "username",
+  `${data.data.user.firstName} ${data.data.user.lastName}`
+);
         localStorage.setItem("userId", data.data.user._id);
 
         setCookie("userToken", data.data.token, {
@@ -164,18 +174,12 @@ const StaffLogin = () => {
                 className="form-control"
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                style={{
-                  borderRadius: "12px",
-                  padding: "12px",
-                }}
               >
                 <option value="">Select Role</option>
 
                 <option value="superAdmin">Super Admin</option>
 
-                <option value="manager">Manager</option>
-
-                <option value="accountOfficer">Account Officer</option>
+                <option value="accountManager">Account Officer</option>
 
                 <option value="assistantManager">Assistant Manager</option>
 
