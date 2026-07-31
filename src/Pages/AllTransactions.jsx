@@ -6,44 +6,92 @@ const AllTransactions = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [AllTransactionsByCash, setAllTransactionsByCash] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(null);
   const [displayedCustomers, setDisplayedCustomers] = useState([]);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const [collectedByFilter, setCollectedByFilter] = useState("");
+  const [collectors, setCollectors] = useState([]);
 
   // ADD THESE
   const [currentPage, setCurrentPage] = useState(1);
   const customersPerPage = 50;
 
-  const handleStartDateChange = (event) => {
-    setStartDate(event.target.value);
+ const handleStartDateChange = (event) => {
+   const value = event.target.value;
+   setStartDate(value);
+   applyFilters(value, endDate, collectedByFilter);
   };
+  
 
-  const handleEndDateChange = (event) => {
-    setEndDate(event.target.value);
-  };
+ const handleEndDateChange = (event) => {
+   const value = event.target.value;
+   setEndDate(value);
+   applyFilters(startDate, value, collectedByFilter);
+ };
+const applyFilters = (
+  start = startDate,
+  end = endDate,
+  collector = collectedByFilter,
+) => {
+  let filtered = [...AllTransactionsByCash];
 
-  const handleDateRangeFilter = () => {
-    const start = startDate ? new Date(startDate) : null;
-    const end = endDate ? new Date(endDate) : null;
+  // Filter by date
+  if (start || end) {
+    filtered = filtered.filter((item) => {
+      const paymentDate = new Date(item.paymentDate);
 
-    const filteredCustomers = AllTransactionsByCash.filter((item) => {
-      const customerDate = new Date(item.paymentDate);
+     if (start) {
+       const startDateObj = new Date(start);
+       startDateObj.setHours(0, 0, 0, 0);
 
-      if (start && end) {
-        return customerDate >= start && customerDate <= end;
-      } else if (start) {
-        return customerDate >= start;
-      } else if (end) {
-        return customerDate <= end;
+       if (paymentDate < startDateObj) {
+         return false;
+       }
+     }
+
+      if (end) {
+        const endDateObj = new Date(end);
+        endDateObj.setHours(23, 59, 59, 999);
+
+        if (paymentDate > endDateObj) {
+          return false;
+        }
       }
 
-      return true; // No date range selected, include all transactions
+      return true;
     });
+  }
 
-    setDisplayedCustomers(filteredCustomers);
-    setCurrentPage(1);
+  // Filter by collected by
+ if (collector) {
+   filtered = filtered.filter(
+     (item) =>
+       (item.collectedBy || "").trim().toLowerCase() ===
+       collector.trim().toLowerCase(),
+   );
+ }
+
+  setDisplayedCustomers(filtered);
+  setCurrentPage(1);
   };
+  const handleCollectedByFilter = (collector) => {
+    setCollectedByFilter(collector);
+    applyFilters(startDate, endDate, collector);
+  };
+  
+
+<button
+  className="btn btn-secondary mb-2 ms-2"
+  onClick={() => {
+    setStartDate("");
+    setEndDate("");
+    setCollectedByFilter("");
+    setDisplayedCustomers(AllTransactionsByCash);
+    setCurrentPage(1);
+  }}
+>
+  Clear Filters
+</button>;  
 
   useEffect(() => {
     const token = localStorage.getItem("token"); // Replace 'your_token_key' with the actual key you use to store the token
@@ -63,10 +111,24 @@ const AllTransactions = () => {
         console.log("Total transactions:", data.data.length);
 
         const sortedTransactions = data.data.reverse();
+        const uniqueCollectors = [
+          ...new Set(
+            sortedTransactions
+              .map((item) => item.collectedBy)
+              .filter((name) => name && name.trim() !== ""),
+          ),
+        ];
+
+        setCollectors(uniqueCollectors);
 
        setAllTransactionsByCash(sortedTransactions);
-       setDisplayedCustomers(sortedTransactions);
-       setCurrentPage(1);
+setDisplayedCustomers(sortedTransactions);
+setCurrentPage(1);
+
+// Reset filters
+setStartDate("");
+setEndDate("");
+setCollectedByFilter("");
       })
       .catch((error) => {
         setError(error.message);
@@ -74,19 +136,7 @@ const AllTransactions = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const handleDateChange = (event) => {
-    setSelectedDate(event.target.value);
-
-    // Immediately filter the data when a date is selected
-    const date = new Date(event.target.value);
-    const filteredCustomers = AllTransactionsByCash.filter((item) => {
-      const customerCreatedAt = new Date(item.paymentDate);
-      return customerCreatedAt.toDateString() === date.toDateString();
-    });
-
-    setDisplayedCustomers(filteredCustomers);
-    setCurrentPage(1);
-  };
+  
 
   const exportToExcel = () => {
     // ✅ Safe alphabetical sort (handles name OR customer)
@@ -128,45 +178,87 @@ const AllTransactions = () => {
   const indexOfLastCustomer = currentPage * customersPerPage;
   const indexOfFirstCustomer = indexOfLastCustomer - customersPerPage;
 
-  const currentCustomers = displayedCustomers.slice(
-    indexOfFirstCustomer,
-    indexOfLastCustomer,
+ const totalPages = Math.max(
+   1,
+   Math.ceil(displayedCustomers.length / customersPerPage),
+ );
+
+ const currentCustomers = displayedCustomers.slice(
+   indexOfFirstCustomer,
+   indexOfLastCustomer,
+  );
+  const totalAmount = displayedCustomers.reduce(
+    (total, item) => total + (Number(item.amount) || 0),
+    0,
   );
 
-  const totalPages = Math.ceil(displayedCustomers.length / customersPerPage);
+  const totalBalance = displayedCustomers.reduce(
+    (total, item) => total + (Number(item.balance) || 0),
+    0,
+  );
 
   return (
     <>
       {loading && <Loader />}
       <div className="card">
         <div className="card-header">
+          <div className="row mt-3">
+            <div className="col-md-4">
+              <div className="alert alert-primary mb-2">
+                <strong>Total Transactions:</strong> {displayedCustomers.length}
+              </div>
+            </div>
+
+            <div className="col-md-4">
+              <div className="alert alert-success mb-2">
+                <strong>Total Amount:</strong> ₦ {totalAmount.toLocaleString()}
+              </div>
+            </div>
+
+            <div className="col-md-4">
+              <div className="alert alert-warning mb-2">
+                <strong>Total Balance:</strong> ₦{" "}
+                {totalBalance.toLocaleString()}
+              </div>
+            </div>
+          </div>
           <h4 class="card-title">All Transactions</h4>
-          <div class="d-flex align-items-center flex-wrap flex-sm-nowrap">
+          <div className="d-flex align-items-center flex-wrap flex-sm-nowrap">
             <div className="mb-3 mt-2 mx-sm-2">
               <label className="sr-only">Start Date</label>
               <input
                 type="date"
                 className="form-control"
-                placeholder="Start Date"
+                value={startDate || ""}
                 onChange={handleStartDateChange}
               />
             </div>
+
             <div className="mb-3 mt-2 mx-sm-2">
               <label className="sr-only">End Date</label>
               <input
                 type="date"
                 className="form-control"
-                placeholder="End Date"
+                value={endDate || ""}
                 onChange={handleEndDateChange}
               />
             </div>
-            <button
-              type="button"
-              className="btn btn-primary mb-2"
-              onClick={handleDateRangeFilter}
-            >
-              Filter By Date Range
-            </button>
+
+            <div className="mb-3 mt-2 mx-sm-2">
+              <select
+                className="form-control"
+                value={collectedByFilter}
+                onChange={(e) => handleCollectedByFilter(e.target.value)}
+              >
+                <option value="">All Staff</option>
+
+                {collectors.map((collector) => (
+                  <option key={collector} value={collector}>
+                    {collector}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
           <button
             type="button"
