@@ -11,6 +11,10 @@ const AllTransactions = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
+  // ADD THESE
+  const [currentPage, setCurrentPage] = useState(1);
+  const customersPerPage = 50;
+
   const handleStartDateChange = (event) => {
     setStartDate(event.target.value);
   };
@@ -38,6 +42,7 @@ const AllTransactions = () => {
     });
 
     setDisplayedCustomers(filteredCustomers);
+    setCurrentPage(1);
   };
 
   useEffect(() => {
@@ -59,8 +64,9 @@ const AllTransactions = () => {
 
         const sortedTransactions = data.data.reverse();
 
-        setAllTransactionsByCash(sortedTransactions);
-        setDisplayedCustomers(sortedTransactions);
+       setAllTransactionsByCash(sortedTransactions);
+       setDisplayedCustomers(sortedTransactions);
+       setCurrentPage(1);
       })
       .catch((error) => {
         setError(error.message);
@@ -79,6 +85,7 @@ const AllTransactions = () => {
     });
 
     setDisplayedCustomers(filteredCustomers);
+    setCurrentPage(1);
   };
 
   const exportToExcel = () => {
@@ -88,6 +95,7 @@ const AllTransactions = () => {
       const nameB = (b.name || "").toLowerCase();
       return nameA.localeCompare(nameB);
     });
+
 
     const formattedData = sortedCustomers.map((item, index) => [
       index + 1,
@@ -116,6 +124,16 @@ const AllTransactions = () => {
     XLSX.utils.book_append_sheet(wb, ws, "Transactions");
     XLSX.writeFile(wb, "olj Vision Transactions Report.xlsx");
   };
+
+  const indexOfLastCustomer = currentPage * customersPerPage;
+  const indexOfFirstCustomer = indexOfLastCustomer - customersPerPage;
+
+  const currentCustomers = displayedCustomers.slice(
+    indexOfFirstCustomer,
+    indexOfLastCustomer,
+  );
+
+  const totalPages = Math.ceil(displayedCustomers.length / customersPerPage);
 
   return (
     <>
@@ -202,10 +220,10 @@ const AllTransactions = () => {
                       <td colSpan="9">No transactions found</td>
                     </tr>
                   ) : (
-                    displayedCustomers.map((item, index) => (
+                    currentCustomers.map((item, index) => (
                       <tr key={index}>
                         {/* ... Table data */}
-                        <td>{index + 1}</td>
+                        <td>{indexOfFirstCustomer + index + 1}</td>
                         <td>{item.name || item.customer}</td>
                         <td>₦ {item.amount}</td>
                         <td>₦ {item.balance}</td>
@@ -232,6 +250,27 @@ const AllTransactions = () => {
               </table>
             </div>
           )}
+        </div>
+        <div className="d-flex justify-content-between align-items-center mt-3">
+          <button
+            className="btn btn-primary"
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(currentPage - 1)}
+          >
+            Previous
+          </button>
+
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+
+          <button
+            className="btn btn-primary"
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(currentPage + 1)}
+          >
+            Next
+          </button>
         </div>
       </div>
     </>
