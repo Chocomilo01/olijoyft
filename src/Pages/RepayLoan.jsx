@@ -301,7 +301,7 @@ const RepayLoan = () => {
                       >
                         <option value="">Select One</option>
                         {users.map((item, index) => (
-                         <option value={`${item.firstName} ${item.lastName}`}>
+                          <option value={item.firstName + item.lastName}>
                             {item.firstName}&nbsp;
                             {item.lastName}
                           </option>
