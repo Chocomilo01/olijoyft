@@ -28,7 +28,7 @@ const RepayLoan = () => {
   // const deleteLoan = async () => {
   //   try {
   //     const response = await fetch(
-  //       `https://olijoy.onrender.com/api/v1/loans/${id}`,
+  //       `http://localhost:5200/api/v1/loans/${id}`,
   //       {
   //         method: "DELETE",
   //         headers: {
@@ -52,7 +52,7 @@ const RepayLoan = () => {
   useEffect(() => {
     const token = localStorage.getItem("token"); // Replace 'your_token_key' with the actual key you use to store the token
 
-    fetch(`https://olijoy.onrender.com/api/v1/users/${cookies.userId}`, {
+    fetch(`http://localhost:5200/api/v1/users/${cookies.userId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -74,7 +74,7 @@ const RepayLoan = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch(`https://olijoy.onrender.com/api/v1/loans/${id}`, {
+    fetch(`http://localhost:5200/api/v1/loans/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -91,7 +91,7 @@ const RepayLoan = () => {
 
         // fetch customer details using the id from loanApplicantsDetails.customer
         return fetch(
-          `https://olijoy.onrender.com/api/v1/customers/${data.data.customer}`,
+          `http://localhost:5200/api/v1/customers/${data.data.customer}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -153,7 +153,7 @@ const RepayLoan = () => {
 
     try {
       const response = await fetch(
-        `https://https://olijoy.onrender.com/api/v1${postEndpoint}`,
+        `http://localhost:5200/api/v1${postEndpoint}`,
         {
           method: "POST",
           headers: {
@@ -186,7 +186,7 @@ const RepayLoan = () => {
     }
   };
   useEffect(() => {
-    fetch("https://olijoy.onrender.com/api/v1/users", {
+    fetch("http://localhost:5200/api/v1/users", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -301,7 +301,7 @@ const RepayLoan = () => {
                       >
                         <option value="">Select One</option>
                         {users.map((item, index) => (
-                          <option value={item.firstName + item.lastName}>
+                         <option value={`${item.firstName} ${item.lastName}`}>
                             {item.firstName}&nbsp;
                             {item.lastName}
                           </option>
