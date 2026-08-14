@@ -178,6 +178,14 @@ const AllTransactions = () => {
     0,
   );
 
+  const totalCredit = displayedCustomers
+    .filter((item) => item.choose?.toLowerCase() === "credit")
+    .reduce((total, item) => total + (Number(item.amount) || 0), 0);
+
+  const totalDebit = displayedCustomers
+    .filter((item) => item.choose?.toLowerCase() === "debit")
+    .reduce((total, item) => total + (Number(item.amount) || 0), 0);
+
   const totalBalance = displayedCustomers.reduce(
     (total, item) => total + (Number(item.balance) || 0),
     0,
@@ -189,22 +197,36 @@ const AllTransactions = () => {
       <div className="card">
         <div className="card-header">
           <div className="row mt-3">
-            <div className="col-md-4">
+            {/* TOTAL TRANSACTIONS */}
+            <div className="col-md-3">
               <div className="alert alert-primary mb-2">
-                <strong>Total Transactions:</strong> {displayedCustomers.length}
+                <strong>Total Transactions:</strong>
+                <br />
+                {displayedCustomers.length.toLocaleString()}
               </div>
             </div>
 
-            <div className="col-md-4">
+            {/* TOTAL CREDIT */}
+            <div className="col-md-3">
               <div className="alert alert-success mb-2">
-                <strong>Total Amount:</strong> ₦ {totalAmount.toLocaleString()}
+                <strong>Total Credit:</strong>
+                <br />₦ {totalCredit.toLocaleString()}
               </div>
             </div>
 
-            <div className="col-md-4">
+            {/* TOTAL DEBIT */}
+            <div className="col-md-3">
+              <div className="alert alert-danger mb-2">
+                <strong>Total Debit:</strong>
+                <br />₦ {totalDebit.toLocaleString()}
+              </div>
+            </div>
+
+            {/* TOTAL BALANCE */}
+            <div className="col-md-3">
               <div className="alert alert-warning mb-2">
-                <strong>Total Balance:</strong> ₦{" "}
-                {totalBalance.toLocaleString()}
+                <strong>Total Balance:</strong>
+                <br />₦ {totalBalance.toLocaleString()}
               </div>
             </div>
           </div>
