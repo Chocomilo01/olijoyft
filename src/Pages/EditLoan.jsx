@@ -46,7 +46,7 @@ const EditLoan = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch(`https://olijoy.onrender.com/api/v1/loans/${id}`, {
+    fetch(`http://localhost:5200/api/v1/loans/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -64,7 +64,7 @@ const EditLoan = () => {
 
         // Now, fetch customer data using the loan.customer value
         return fetch(
-          `https://olijoy.onrender.com/api/v1/customers/${data.data.customer}`,
+          `http://localhost:5200/api/v1/customers/${data.data.customer}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -148,17 +148,14 @@ const EditLoan = () => {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch(
-        `https://olijoy.onrender.com/api/v1/loans/${id}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
+      const response = await fetch(`http://localhost:5200/api/v1/loans/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-      );
+        body: JSON.stringify(payload),
+      });
 
       if (!response.ok) {
         throw new Error("Network response was not ok");

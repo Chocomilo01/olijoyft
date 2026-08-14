@@ -55,7 +55,7 @@ const ChangePassword = () => {
 
     try {
       const response = await fetch(
-        `https://olijoy.onrender.com/api/v1/users/change-password`,
+        `http://localhost:5200/api/v1/users/change-password`,
         {
           method: "POST",
           headers: {

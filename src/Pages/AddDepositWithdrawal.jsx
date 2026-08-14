@@ -25,7 +25,7 @@ const AddDepositWithdrawal = () => {
   useEffect(() => {
     const token = localStorage.getItem("token"); // Replace 'your_token_key' with the actual key you use to store the token
 
-    fetch(`https://olijoy.onrender.com/api/v1/customers/${id}`, {
+    fetch(`http://localhost:5200/api/v1/customers/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -49,7 +49,7 @@ const AddDepositWithdrawal = () => {
   useEffect(() => {
     const token = localStorage.getItem("token"); // Replace 'your_token_key' with the actual key you use to store the token
 
-    fetch(`https://olijoy.onrender.com/api/v1/users/${cookies.userId}`, {
+    fetch(`http://localhost:5200/api/v1/users/${cookies.userId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -68,12 +68,42 @@ const AddDepositWithdrawal = () => {
       .catch((error) => console.log("Error fetching Logged In data: ", error))
       .finally(() => setLoading(false));
   }, []);
+const formatAmountInput = (value) => {
+  // Remove commas and anything that isn't a number or decimal point
+  const cleanValue = value.replace(/,/g, "").replace(/[^0-9.]/g, "");
 
+  if (!cleanValue) {
+    return "";
+  }
+
+  // Prevent multiple decimal points
+  const parts = cleanValue.split(".");
+
+  const integerPart = parts[0];
+  const decimalPart = parts[1];
+
+  // Format integer part with commas
+  const formattedInteger = Number(integerPart || 0).toLocaleString("en-US");
+
+  // Allow decimal values
+  if (decimalPart !== undefined) {
+    return `${formattedInteger}.${decimalPart.slice(0, 2)}`;
+  }
+
+  return formattedInteger;
+};
   const handleSubmit = async (e, forceCreate = false) => {
     e.preventDefault();
 
+    const numericAmount = Number(amount.replace(/,/g, ""));
+
+    if (!numericAmount || numericAmount <= 0) {
+      toast.error("Please enter a valid amount");
+      return;
+    }
+
     const formData = {
-      amount: amount,
+      amount: numericAmount,
       type: debitCredit === "debit" ? "withdrawal" : "deposit",
       choose: debitCredit,
       customerId: customerDetails?._id,
@@ -81,7 +111,7 @@ const AddDepositWithdrawal = () => {
       description: description,
       modeOfPayment: type,
       paymentDate: paymentDate,
-      uploadedBy: user.firstName + " " + user.lastName,
+      uploadedBy: `${user?.firstName || ""} ${user?.lastName || ""}`.trim(),
       name: customerDetails?.name,
       forceCreate,
     };
@@ -98,7 +128,7 @@ const AddDepositWithdrawal = () => {
 
     try {
       const response = await fetch(
-        `https://olijoy.onrender.com/api/v1${postEndpoint}`,
+        `http://localhost:5200/api/v1${postEndpoint}`,
         {
           method: "POST",
           headers: {
@@ -110,6 +140,9 @@ const AddDepositWithdrawal = () => {
       );
 
       const data = await response.json();
+
+      console.log("STATUS:", response.status);
+      console.log("BACKEND RESPONSE:", data);
 
       if (data.duplicate) {
         const proceed = window.confirm(
@@ -130,7 +163,11 @@ const AddDepositWithdrawal = () => {
       }
 
       if (!response.ok) {
-        throw new Error(data.message || "Something went wrong");
+        throw new Error(
+          data.message ||
+            data.error ||
+            `Request failed with status ${response.status}`,
+        );
       }
 
       toast.success(
@@ -154,7 +191,7 @@ const AddDepositWithdrawal = () => {
   }, []);
 
   useEffect(() => {
-    fetch("https://olijoy.onrender.com/api/v1/users", {
+    fetch("http://localhost:5200/api/v1/users", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -211,10 +248,13 @@ const AddDepositWithdrawal = () => {
                   <div class="mb-3 col-md-6">
                     <label class="form-label">Amount</label>
                     <input
-                      type="number"
+                      type="text"
+                      inputMode="decimal"
                       value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
-                      class="form-control"
+                      onChange={(e) =>
+                        setAmount(formatAmountInput(e.target.value))
+                      }
+                      className="form-control"
                       placeholder="Amount"
                     />
                   </div>

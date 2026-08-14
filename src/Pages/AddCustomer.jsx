@@ -32,7 +32,6 @@ const AddCustomer = () => {
   const [accountOfficer, setAccountOfficer] = useState("");
   const [loading, setLoading] = useState(false);
 
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -75,17 +74,14 @@ const AddCustomer = () => {
       console.log("Logged In User:", userss);
       console.log("Selected Officer:", accountOfficer);
       console.log("Sending:", formData);
-      const response = await fetch(
-        "https://olijoy.onrender.com/api/v1/customers",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(formData),
+      const response = await fetch("http://localhost:5200/api/v1/customers", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-      );
+        body: JSON.stringify(formData),
+      });
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -108,9 +104,8 @@ const AddCustomer = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token"); // Replace 'your_token_key' with the actual key you use to store the token
-    
 
-    fetch("https://olijoy.onrender.com/api/v1/users", {
+    fetch("http://localhost:5200/api/v1/users", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -136,10 +131,9 @@ const AddCustomer = () => {
   // console.log("Filtered Officers:", filteredUsers);
 
   useEffect(() => {
-   
     const token = localStorage.getItem("token"); // Replace 'your_token_key' with the actual key you use to store the token
 
-    fetch(`https://olijoy.onrender.com/api/v1/users/${cookies.userId}`, {
+    fetch(`http://localhost:5200/api/v1/users/${cookies.userId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

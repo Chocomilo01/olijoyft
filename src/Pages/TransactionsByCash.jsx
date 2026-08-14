@@ -11,7 +11,7 @@ const TransactionsByCash = () => {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    fetch("https://olijoy.onrender.com/api/v1/transactions/transactions/cash", {
+    fetch("http://localhost:5200/api/v1/transactions/transactions/cash", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

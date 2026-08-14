@@ -57,7 +57,7 @@ const AddNewUser = () => {
 
     try {
       const response = await fetch(
-        "https://olijoy.onrender.com/api/v1/users/register",
+        "http://localhost:5200/api/v1/users/register",
         {
           method: "POST",
           headers: {
@@ -71,7 +71,7 @@ const AddNewUser = () => {
       const data = await response.json();
       if (response.ok) {
         toast.success("User registered successfully");
-        
+
         // Further actions on successful addition of user
 
         setTimeout(() => {
@@ -89,14 +89,12 @@ const AddNewUser = () => {
 
   return (
     <>
-  <ToastContainer
-    position="top-right"
-    autoClose={5000}
-    hideProgressBar={false}
-  />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+      />
 
-  
-      
       <div class="col-xl-12 col-lg-12">
         <div class="card">
           <div class="card-header">

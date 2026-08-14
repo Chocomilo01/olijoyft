@@ -31,7 +31,7 @@ const LoanApplicants = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `https://olijoy.onrender.com/api/v1/customers/${customerId}`,
+        `http://localhost:5200/api/v1/customers/${customerId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -72,9 +72,9 @@ const LoanApplicants = () => {
         let apiUrl;
 
         if (startDate && endDate) {
-          apiUrl = `https://olijoy.onrender.com/api/v1/loans/by-payment-date?startDate=${startDate}&endDate=${endDate}`;
+          apiUrl = `http://localhost:5200/api/v1/loans/by-payment-date?startDate=${startDate}&endDate=${endDate}`;
         } else {
-          apiUrl = "https://olijoy.onrender.com/api/v1/loans";
+          apiUrl = "http://localhost:5200/api/v1/loans";
         }
 
         const token = localStorage.getItem("token");
@@ -152,7 +152,7 @@ const LoanApplicants = () => {
         const token = localStorage.getItem("token");
         try {
           const response = await fetch(
-            `https://olijoy.onrender.com/api/v1/loans/${loanId}`,
+            `http://localhost:5200/api/v1/loans/${loanId}`,
             {
               method: "DELETE",
               headers: {

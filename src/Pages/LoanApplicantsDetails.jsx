@@ -28,7 +28,7 @@ const LoanApplicantsDetails = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch(`https://olijoy.onrender.com/api/v1/loans/${id}`, {
+    fetch(`http://localhost:5200/api/v1/loans/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -43,7 +43,7 @@ const LoanApplicantsDetails = () => {
         setLoanApplicantsDetails(data.data);
 
         return fetch(
-          `https://olijoy.onrender.com/api/v1/customers/${data.data?.customer}`,
+          `http://localhost:5200/api/v1/customers/${data.data?.customer}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -68,7 +68,7 @@ const LoanApplicantsDetails = () => {
 
     if (customerDetails) {
       fetch(
-        `https://olijoy.onrender.com/api/v1/loans/customer/${loanApplicantsDetails?.customer}/loans`,
+        `http://localhost:5200/api/v1/loans/customer/${loanApplicantsDetails?.customer}/loans`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

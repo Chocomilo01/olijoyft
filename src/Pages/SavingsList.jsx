@@ -28,7 +28,7 @@ const SavingsList = () => {
   };
   useEffect(() => {
     setLoading(true); // Show loader when fetching data
-    fetch("https://olijoy.onrender.com/api/v1/customers", {
+    fetch("http://localhost:5200/api/v1/customers", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -75,7 +75,7 @@ const SavingsList = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         setDeleting(true);
-        fetch(`https://olijoy.onrender.com/api/v1/customers/${customerId}`, {
+        fetch(`http://localhost:5200/api/v1/customers/${customerId}`, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -173,7 +173,7 @@ const SavingsList = () => {
             try {
               // Fetch transactions for balance calculation
               const response = await fetch(
-                `https://olijoy.onrender.com/api/v1/customers/${customer._id}/transactions`,
+                `http://localhost:5200/api/v1/customers/${customer._id}/transactions`,
                 { headers: { Authorization: `Bearer ${token}` } },
               );
               const transactions = await response.json();
@@ -256,7 +256,7 @@ const SavingsList = () => {
       // Fetch transactions for each displayed customer
       for (const customer of displayedCustomers) {
         const response = await fetch(
-          `https://olijoy.onrender.com/api/v1/customers/${customer._id}/transactions`, // Assuming the endpoint returns transactions
+          `http://localhost:5200/api/v1/customers/${customer._id}/transactions`, // Assuming the endpoint returns transactions
           {
             headers: {
               Authorization: `Bearer ${token}`,

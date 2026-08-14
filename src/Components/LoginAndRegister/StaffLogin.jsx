@@ -25,20 +25,17 @@ const StaffLogin = () => {
         password,
         roles: role,
       });
-      const response = await fetch(
-        "https://olijoy.onrender.com/api/v1/users/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email,
-            password,
-            roles: role,
-          }),
+      const response = await fetch("http://localhost:5200/api/v1/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          email,
+          password,
+          roles: role,
+        }),
+      });
 
       const data = await response.json();
       console.log("Status:", response.status);
@@ -48,10 +45,10 @@ const StaffLogin = () => {
         toast.success("Login Successful");
 
         localStorage.setItem("token", data.data.token);
-       localStorage.setItem(
-  "username",
-  `${data.data.user.firstName} ${data.data.user.lastName}`
-);
+        localStorage.setItem(
+          "username",
+          `${data.data.user.firstName} ${data.data.user.lastName}`,
+        );
         localStorage.setItem("userId", data.data.user._id);
 
         setCookie("userToken", data.data.token, {

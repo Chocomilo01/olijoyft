@@ -8,7 +8,7 @@ const UsersList = () => {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    fetch("https://olijoy.onrender.com/api/v1/users", {
+    fetch("http://localhost:5200/api/v1/users", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -25,15 +25,55 @@ const UsersList = () => {
       })
       .catch((error) => console.log("Error fetching data: ", error))
       .finally(() => setLoading(false)); // Set loading to false here, after success or error
-  }, []);
-  function camelToNormalCase(text) {
-    return (
-      text
-        // Insert a space before all capital letters
-        .replace(/([A-Z])/g, " $1")
-        // Convert the first character of the string to uppercase
-        .replace(/^./, (str) => str.toUpperCase())
+  }, [token]);
+
+  const handleDelete = async (userId) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this user?",
     );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await fetch(
+        `http://localhost:5200/api/v1/users/${userId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      const data = await response.json();
+
+      console.log("Delete response:", data);
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to delete user");
+      }
+
+      // Remove the deleted user from the current list
+      setUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId));
+
+      alert("User deleted successfully");
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      alert(error.message || "Unable to delete user");
+    } finally {
+      setLoading(false);
+    }
+  };
+  function camelToNormalCase(text) {
+    if (!text) return "N/A";
+
+    return text
+      .replace(/([A-Z])/g, " $1")
+      .replace(/^./, (str) => str.toUpperCase());
   }
   return (
     <>
@@ -127,20 +167,29 @@ const UsersList = () => {
                             </g>
                           </svg>
                         </button>
-                        <div class="dropdown-menu">
-                          <Link
-                            to={`/user-details/${item._id}`}
-                            class="dropdown-item"
-                          >
-                            View Details
-                          </Link>
-                          <a class="dropdown-item" href="#">
-                            Edit
-                          </a>
+                        <div className="dropdown-menu">
+  <Link
+    to={`/user-details/${item._id}`}
+    className="dropdown-item"
+  >
+    View Details
+  </Link>
 
-                          <a class="dropdown-item" href="#">
-                            Delete
-                          </a>
+  <Link
+    to={`/edit-user/${item._id}`}
+    className="dropdown-item"
+  >
+    Edit
+  </Link>
+
+  <button
+    type="button"
+    className="dropdown-item"
+    onClick={() => handleDelete(item._id)}
+  >
+    Delete
+  </button>
+
                         </div>
                       </div>
                     </td>

@@ -14,14 +14,11 @@ const LoanInterests = () => {
       try {
         setLoading(true);
 
-        const response = await fetch(
-          "https://olijoy.onrender.com/api/v1/loans",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const response = await fetch("http://localhost:5200/api/v1/loans", {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
         const data = await response.json();
 
         setLoans(data.data);
@@ -31,7 +28,7 @@ const LoanInterests = () => {
           const customerId = loan.customer;
           if (customerId) {
             const customerResponse = await fetch(
-              `https://olijoy.onrender.com/api/v1/customers/${customerId}`,
+              `http://localhost:5200/api/v1/customers/${customerId}`,
               {
                 headers: {
                   Authorization: `Bearer ${token}`,

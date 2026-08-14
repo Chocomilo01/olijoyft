@@ -6,6 +6,7 @@ import Routing from "./Routes";
 import Login from "./Components/LoginAndRegister/Login";
 import About from "./Components/LoginAndRegister/About";
 import React, { useState } from "react";
+import EditUser from "./Pages/EditUser";
 
 
 
@@ -26,6 +27,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/about" element={<About />} />
           <Route path="/staff-login" element={<StaffLogin />} />
+          <Route path="/edit-user/:id" element={<EditUser />} />
           {/* PROTECTED ROUTES */}
           <Route
             path="/*"

@@ -6,7 +6,7 @@ const Users = () => {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    fetch("https://olijoy.onrender.com/api/v1/users", {
+    fetch("http://localhost:5200/api/v1/users", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

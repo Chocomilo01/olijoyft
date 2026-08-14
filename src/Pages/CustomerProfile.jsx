@@ -35,7 +35,7 @@ const CustomerProfile = () => {
         setLoading(true);
 
         const response = await fetch(
-          "https://olijoy.onrender.com/api/v1/loans",
+          `http://localhost:5200/api/v1/loans/customer/${id}/loans`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -51,7 +51,7 @@ const CustomerProfile = () => {
             const token = localStorage.getItem("token");
 
             const customerResponse = await fetch(
-              `https://olijoy.onrender.com/api/v1/customers/${customerId}`,
+              `http://localhost:5200/api/v1/customers/${customerId}`,
               {
                 headers: {
                   Authorization: `Bearer ${token}`,
@@ -81,7 +81,7 @@ const CustomerProfile = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    fetch(`https://olijoy.onrender.com/api/v1/customers/${id}`, {
+    fetch(`http://localhost:5200/api/v1/customers/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -104,11 +104,14 @@ const CustomerProfile = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch(`https://olijoy.onrender.com/api/v1/customers/${id}/transactions`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    fetch(
+      `http://localhost:5200/api/v1/customers/${id}/transactions`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    })
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -145,14 +148,16 @@ const CustomerProfile = () => {
   });
 
   useEffect(() => {
-    // Find the loan item where customer field matches id
-    const matchingLoan = loans.find((loan) => loan.customer === id);
+    const matchingLoan = loans.find(
+      (loan) => loan.customer?._id === id || loan.customer === id,
+    );
 
     if (matchingLoan) {
-      // Extract _id from the matching loan
-      const loanId = matchingLoan._id;
-      setLoanProfile(loanId);
-      console.log("Matching Loan ID:", loanId);
+      setLoanProfile(matchingLoan._id);
+      console.log("Customer Loan Profile:", matchingLoan);
+    } else {
+      setLoanProfile(null);
+      toast.info("This customer does not have any active loan profile");
     }
   }, [loans, id]);
   const exportToExcel = () => {
@@ -160,7 +165,7 @@ const CustomerProfile = () => {
 
     doc.addImage(imgData, "PNG", 150, 10, 40, 15);
     doc.setFontSize(16);
-    doc.text("olj Vision Mutual Resources Investment Limited", 14, 25);
+    doc.text("Eagle Vision Mutual Resources Investment Limited", 14, 25);
 
     doc.setFontSize(8);
     doc.text("No 6, Post Office Road Mushin Lagos", 14, 30);
@@ -232,7 +237,7 @@ const CustomerProfile = () => {
       theme: "striped",
     });
 
-    doc.save("oljVision_Transactions.pdf");
+    doc.save("EagleVision_Transactions.pdf");
   };
 
   function addCommas(number) {
@@ -299,12 +304,23 @@ const CustomerProfile = () => {
               <div class="text-center">
                 <div class="row">
                   <div class="col">
-                    <Link
-                      class="btn btn-primary mb-1 me-1"
-                      to={`/loan-applicants-details/${loanProfile}`}
-                    >
-                      Loans
-                    </Link>
+                    {loanProfile ? (
+                      <Link
+                        className="btn btn-primary mb-1 me-1"
+                        to={`/loan-applicants-details/${loanProfile}`}
+                      >
+                        Has Active Loan
+                      </Link>
+                    ) : (
+                      <button
+                        className="btn btn-secondary mb-1 me-1"
+                        onClick={() =>
+                          toast.info("This customer has no loan profile")
+                        }
+                      >
+                        No Active Loan
+                      </button>
+                    )}
                   </div>
                   <div class="col">
                     <a class="btn btn-primary mb-1 me-1">

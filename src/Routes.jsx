@@ -33,7 +33,7 @@ import EditLoan from "./Pages/EditLoan";
 import EditCustomer from "./Pages/EditCustomer";
 import Updateloan from "./Pages/Updateloan";
 import Withdrawals from "./Pages/Withdrawals";
-
+import EditUser from "./Pages/EditUser";
 const Routing = () => {
   return (
     <>
@@ -45,7 +45,10 @@ const Routing = () => {
         <Route path="/customer-profile/:id" element={<CustomerProfile />} />
         <Route path="/savings-list" element={<SavingsList />} />
         <Route path="/loans" element={<Loans />} />
-        <Route path="/add-contribution/:id" element={<AddDepositWithdrawal />} />
+        <Route
+          path="/add-contribution/:id"
+          element={<AddDepositWithdrawal />}
+        />
         <Route path="/repay-loan/:id" element={<RepayLoan />} />
         <Route path="/users" element={<Users />} />
         <Route path="/users-list" element={<UsersList />} />
@@ -58,6 +61,7 @@ const Routing = () => {
           element={<CustomerAvailableBalance />}
         />
         <Route path="/user-details/:id" element={<UsersDetails />} />
+        <Route path="/edit-user/:id" element={<EditUser />} />
         <Route path="/add-user" element={<AddNewUser />} />
         <Route path="/new-loan-applicant" element={<LoanApplication />} />
         <Route path="/loan-applicants" element={<LoanApplicants />} />
@@ -73,7 +77,10 @@ const Routing = () => {
         <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/loan-duration" element={<LoanDurations />} />
         <Route path="/transactions-by-cash" element={<TransactionsByCash />} />
-        <Route path="/transactions-by-transfer" element={<TransactionsByTransfer />} />
+        <Route
+          path="/transactions-by-transfer"
+          element={<TransactionsByTransfer />}
+        />
         <Route path="/transactions" element={<AllTransactions />} />
         <Route path="/withdrawals" element={<Withdrawals />} />
         <Route path="/expenses" element={<Expenses />} />

@@ -16,87 +16,76 @@ const AllTransactions = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const customersPerPage = 50;
 
- const handleStartDateChange = (event) => {
-   const value = event.target.value;
-   setStartDate(value);
-   applyFilters(value, endDate, collectedByFilter);
+  const handleStartDateChange = (event) => {
+    const value = event.target.value;
+    setStartDate(value);
+    applyFilters(value, endDate, collectedByFilter);
   };
-  
 
- const handleEndDateChange = (event) => {
-   const value = event.target.value;
-   setEndDate(value);
-   applyFilters(startDate, value, collectedByFilter);
- };
-const applyFilters = (
-  start = startDate,
-  end = endDate,
-  collector = collectedByFilter,
-) => {
-  let filtered = [...AllTransactionsByCash];
+  const handleEndDateChange = (event) => {
+    const value = event.target.value;
+    setEndDate(value);
+    applyFilters(startDate, value, collectedByFilter);
+  };
+  const applyFilters = (
+    start = startDate,
+    end = endDate,
+    collector = collectedByFilter,
+  ) => {
+    let filtered = [...AllTransactionsByCash];
 
-  // Filter by date
-  if (start || end) {
-    filtered = filtered.filter((item) => {
-      const paymentDate = new Date(item.paymentDate);
+    // Date filter
+    if (start || end) {
+      filtered = filtered.filter((item) => {
+        // Compare only YYYY-MM-DD strings
+        const paymentDate = item.paymentDate?.split("T")[0];
 
-     if (start) {
-       const startDateObj = new Date(start);
-       startDateObj.setHours(0, 0, 0, 0);
-
-       if (paymentDate < startDateObj) {
-         return false;
-       }
-     }
-
-      if (end) {
-        const endDateObj = new Date(end);
-        endDateObj.setHours(23, 59, 59, 999);
-
-        if (paymentDate > endDateObj) {
+        if (start && paymentDate < start) {
           return false;
         }
-      }
 
-      return true;
-    });
-  }
+        if (end && paymentDate > end) {
+          return false;
+        }
 
-  // Filter by collected by
- if (collector) {
-   filtered = filtered.filter(
-     (item) =>
-       (item.collectedBy || "").trim().toLowerCase() ===
-       collector.trim().toLowerCase(),
-   );
- }
+        return true;
+      });
+    }
 
-  setDisplayedCustomers(filtered);
-  setCurrentPage(1);
+    // Staff filter
+    if (collector) {
+      filtered = filtered.filter(
+        (item) =>
+          (item.collectedBy || "").trim().toLowerCase() ===
+          collector.trim().toLowerCase(),
+      );
+    }
+
+    setDisplayedCustomers(filtered);
+    setCurrentPage(1);
   };
   const handleCollectedByFilter = (collector) => {
     setCollectedByFilter(collector);
     applyFilters(startDate, endDate, collector);
   };
-  
 
-<button
-  className="btn btn-secondary mb-2 ms-2"
-  onClick={() => {
-    setStartDate("");
-    setEndDate("");
-    setCollectedByFilter("");
-    setDisplayedCustomers(AllTransactionsByCash);
-    setCurrentPage(1);
-  }}
->
-  Clear Filters
-</button>;  
+  <button
+    className="btn btn-secondary mb-2 ms-2"
+    onClick={() => {
+      setStartDate("");
+      setEndDate("");
+      setCollectedByFilter("");
+      setDisplayedCustomers(AllTransactionsByCash);
+      setCurrentPage(1);
+    }}
+  >
+    Clear Filters
+  </button>;
 
   useEffect(() => {
     const token = localStorage.getItem("token"); // Replace 'your_token_key' with the actual key you use to store the token
 
-    fetch("https://olijoy.onrender.com/api/v1/transactions/transactions", {
+    fetch("http://localhost:5200/api/v1/transactions/transactions", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -121,22 +110,20 @@ const applyFilters = (
 
         setCollectors(uniqueCollectors);
 
-       setAllTransactionsByCash(sortedTransactions);
-setDisplayedCustomers(sortedTransactions);
-setCurrentPage(1);
+        setAllTransactionsByCash(sortedTransactions);
+        setDisplayedCustomers(sortedTransactions);
+        setCurrentPage(1);
 
-// Reset filters
-setStartDate("");
-setEndDate("");
-setCollectedByFilter("");
+        // Reset filters
+        setStartDate("");
+        setEndDate("");
+        setCollectedByFilter("");
       })
       .catch((error) => {
         setError(error.message);
       })
       .finally(() => setLoading(false));
   }, []);
-
-  
 
   const exportToExcel = () => {
     // ✅ Safe alphabetical sort (handles name OR customer)
@@ -145,7 +132,6 @@ setCollectedByFilter("");
       const nameB = (b.name || "").toLowerCase();
       return nameA.localeCompare(nameB);
     });
-
 
     const formattedData = sortedCustomers.map((item, index) => [
       index + 1,
@@ -178,14 +164,14 @@ setCollectedByFilter("");
   const indexOfLastCustomer = currentPage * customersPerPage;
   const indexOfFirstCustomer = indexOfLastCustomer - customersPerPage;
 
- const totalPages = Math.max(
-   1,
-   Math.ceil(displayedCustomers.length / customersPerPage),
- );
+  const totalPages = Math.max(
+    1,
+    Math.ceil(displayedCustomers.length / customersPerPage),
+  );
 
- const currentCustomers = displayedCustomers.slice(
-   indexOfFirstCustomer,
-   indexOfLastCustomer,
+  const currentCustomers = displayedCustomers.slice(
+    indexOfFirstCustomer,
+    indexOfLastCustomer,
   );
   const totalAmount = displayedCustomers.reduce(
     (total, item) => total + (Number(item.amount) || 0),

@@ -3,7 +3,7 @@ import Loader from "../Components/Loader/Loader";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { CookiesProvider, useCookies } from "react-cookie";
-
+import Select from "react-select";
 const LoanApplication = () => {
   const [customers, setCustomers] = useState([]);
   const navigate = useNavigate();
@@ -48,7 +48,7 @@ const LoanApplication = () => {
   useEffect(() => {
     const token = localStorage.getItem("token"); // Replace 'your_token_key' with the actual key you use to store the token
 
-    fetch(`https://olijoy.onrender.com/api/v1/users/${cookies.userId}`, {
+    fetch(`http://localhost:5200/api/v1/users/${cookies.userId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -69,7 +69,7 @@ const LoanApplication = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch("https://olijoy.onrender.com/api/v1/customers", {
+    fetch("http://localhost:5200/api/v1/customers", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -152,7 +152,7 @@ const LoanApplication = () => {
 
     try {
       const response = await fetch(
-        "https://olijoy.onrender.com/api/v1/loans/disbursement",
+        "http://localhost:5200/api/v1/loans/disbursement",
         {
           method: "POST",
           headers: {
@@ -196,20 +196,29 @@ const LoanApplication = () => {
                 <div class="row">
                   <div class="mb-3 col-md-6">
                     <label class="form-label">Search and Select Customer</label>
-                    <select
-                      id="inputState"
-                      className="form-control"
-                      value={customerSelection}
-                      onChange={(e) => setCustomerSelection(e.target.value)}
-                    >
-                      <option value="">Select Customer</option>
-
-                      {customers.map((customer) => (
-                        <option key={customer._id} value={customer._id}>
-                          {customer.name}
-                        </option>
-                      ))}
-                    </select>
+                    <Select
+                      options={customers.map((customer) => ({
+                        value: customer._id,
+                        label: customer.name,
+                      }))}
+                      value={
+                        customers
+                          .map((customer) => ({
+                            value: customer._id,
+                            label: customer.name,
+                          }))
+                          .find(
+                            (option) => option.value === customerSelection,
+                          ) || null
+                      }
+                      onChange={(selectedOption) => {
+                        setCustomerSelection(selectedOption?.value || "");
+                      }}
+                      placeholder="Search customer by name..."
+                      isSearchable
+                      isClearable
+                      noOptionsMessage={() => "Customer not found"}
+                    />
                   </div>
                   <div class="mb-3 col-md-6">
                     <label class="form-label">Loan Title</label>
