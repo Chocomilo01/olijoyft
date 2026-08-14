@@ -57,7 +57,7 @@ const AddNewUser = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:5200/api/v1/users/register",
+        "https://olijoy.onrender.com/api/v1/users/register",
         {
           method: "POST",
           headers: {

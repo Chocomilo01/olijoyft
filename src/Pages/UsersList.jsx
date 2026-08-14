@@ -8,7 +8,7 @@ const UsersList = () => {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    fetch("http://localhost:5200/api/v1/users", {
+    fetch("https://olijoy.onrender.com/api/v1/users", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -40,7 +40,7 @@ const UsersList = () => {
       setLoading(true);
 
       const response = await fetch(
-        `http://localhost:5200/api/v1/users/${userId}`,
+        `https://olijoy.onrender.com/api/v1/users/${userId}`,
         {
           method: "DELETE",
           headers: {
@@ -168,28 +168,27 @@ const UsersList = () => {
                           </svg>
                         </button>
                         <div className="dropdown-menu">
-  <Link
-    to={`/user-details/${item._id}`}
-    className="dropdown-item"
-  >
-    View Details
-  </Link>
+                          <Link
+                            to={`/user-details/${item._id}`}
+                            className="dropdown-item"
+                          >
+                            View Details
+                          </Link>
 
-  <Link
-    to={`/edit-user/${item._id}`}
-    className="dropdown-item"
-  >
-    Edit
-  </Link>
+                          <Link
+                            to={`/edit-user/${item._id}`}
+                            className="dropdown-item"
+                          >
+                            Edit
+                          </Link>
 
-  <button
-    type="button"
-    className="dropdown-item"
-    onClick={() => handleDelete(item._id)}
-  >
-    Delete
-  </button>
-
+                          <button
+                            type="button"
+                            className="dropdown-item"
+                            onClick={() => handleDelete(item._id)}
+                          >
+                            Delete
+                          </button>
                         </div>
                       </div>
                     </td>

@@ -25,7 +25,7 @@ const AddDepositWithdrawal = () => {
   useEffect(() => {
     const token = localStorage.getItem("token"); // Replace 'your_token_key' with the actual key you use to store the token
 
-    fetch(`http://localhost:5200/api/v1/customers/${id}`, {
+    fetch(`https://olijoy.onrender.com/api/v1/customers/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -49,7 +49,7 @@ const AddDepositWithdrawal = () => {
   useEffect(() => {
     const token = localStorage.getItem("token"); // Replace 'your_token_key' with the actual key you use to store the token
 
-    fetch(`http://localhost:5200/api/v1/users/${cookies.userId}`, {
+    fetch(`https://olijoy.onrender.com/api/v1/users/${cookies.userId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -68,30 +68,30 @@ const AddDepositWithdrawal = () => {
       .catch((error) => console.log("Error fetching Logged In data: ", error))
       .finally(() => setLoading(false));
   }, []);
-const formatAmountInput = (value) => {
-  // Remove commas and anything that isn't a number or decimal point
-  const cleanValue = value.replace(/,/g, "").replace(/[^0-9.]/g, "");
+  const formatAmountInput = (value) => {
+    // Remove commas and anything that isn't a number or decimal point
+    const cleanValue = value.replace(/,/g, "").replace(/[^0-9.]/g, "");
 
-  if (!cleanValue) {
-    return "";
-  }
+    if (!cleanValue) {
+      return "";
+    }
 
-  // Prevent multiple decimal points
-  const parts = cleanValue.split(".");
+    // Prevent multiple decimal points
+    const parts = cleanValue.split(".");
 
-  const integerPart = parts[0];
-  const decimalPart = parts[1];
+    const integerPart = parts[0];
+    const decimalPart = parts[1];
 
-  // Format integer part with commas
-  const formattedInteger = Number(integerPart || 0).toLocaleString("en-US");
+    // Format integer part with commas
+    const formattedInteger = Number(integerPart || 0).toLocaleString("en-US");
 
-  // Allow decimal values
-  if (decimalPart !== undefined) {
-    return `${formattedInteger}.${decimalPart.slice(0, 2)}`;
-  }
+    // Allow decimal values
+    if (decimalPart !== undefined) {
+      return `${formattedInteger}.${decimalPart.slice(0, 2)}`;
+    }
 
-  return formattedInteger;
-};
+    return formattedInteger;
+  };
   const handleSubmit = async (e, forceCreate = false) => {
     e.preventDefault();
 
@@ -128,7 +128,7 @@ const formatAmountInput = (value) => {
 
     try {
       const response = await fetch(
-        `http://localhost:5200/api/v1${postEndpoint}`,
+        `https://olijoy.onrender.com/api/v1${postEndpoint}`,
         {
           method: "POST",
           headers: {
@@ -191,7 +191,7 @@ const formatAmountInput = (value) => {
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:5200/api/v1/users", {
+    fetch("https://olijoy.onrender.com/api/v1/users", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

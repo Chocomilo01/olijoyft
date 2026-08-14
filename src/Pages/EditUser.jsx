@@ -4,7 +4,6 @@ import Loader from "../Components/Loader/Loader";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
 const EditUser = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -33,7 +32,7 @@ const EditUser = () => {
         setLoading(true);
 
         const response = await fetch(
-          `http://localhost:5200/api/v1/users/${id}`,
+          `https://olijoy.onrender.com/api/v1/users/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -50,15 +49,15 @@ const EditUser = () => {
         }
 
         const user = data.data;
-setFormData({
-  firstName: user.firstName || "",
-  lastName: user.lastName || "",
-  email: user.email || "",
-  phone: user.phone || "",
-  bvn: user.bvn || "",
-  roles: user.roles || "",
-  status: user.status || "",
-});
+        setFormData({
+          firstName: user.firstName || "",
+          lastName: user.lastName || "",
+          email: user.email || "",
+          phone: user.phone || "",
+          bvn: user.bvn || "",
+          roles: user.roles || "",
+          status: user.status || "",
+        });
       } catch (error) {
         console.error("Error fetching user:", error);
         toast.error(error.message || "Unable to fetch user");
@@ -116,14 +115,17 @@ setFormData({
     try {
       setSaving(true);
 
-      const response = await fetch(`http://localhost:5200/api/v1/users/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+      const response = await fetch(
+        `https://olijoy.onrender.com/api/v1/users/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(formData),
         },
-        body: JSON.stringify(formData),
-      });
+      );
 
       const data = await response.json();
 

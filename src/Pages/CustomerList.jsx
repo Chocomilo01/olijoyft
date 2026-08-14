@@ -19,7 +19,7 @@ const CustomerList = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch("http://localhost:5200/api/v1/customers", {
+    fetch("https://olijoy.onrender.com/api/v1/customers", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -68,7 +68,7 @@ const CustomerList = () => {
         const token = localStorage.getItem("token");
 
         setDeleting(true);
-        fetch(`http://localhost:5200/api/v1/customers/${customerId}`, {
+        fetch(`https://olijoy.onrender.com/api/v1/customers/${customerId}`, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
