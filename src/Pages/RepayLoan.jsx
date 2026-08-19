@@ -119,36 +119,81 @@ const RepayLoan = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!customerDetails?._id) {
+      toast.error("Customer details are not available");
+      return;
+    }
+
+    if (!repaymentAmount || Number(repaymentAmount) <= 0) {
+      toast.error("Please enter a valid repayment amount");
+      return;
+    }
+
+    if (!debitCredit) {
+      toast.error("Please select Debit or Credit");
+      return;
+    }
+
+    if (!type) {
+      toast.error("Please select payment type");
+      return;
+    }
+
     const formData = {
       type: debitCredit === "debit" ? "withdrawal" : "deposit",
+
       customerId: customerDetails._id,
-      amount: repaymentAmount,
-      interestRate: interestRate,
+
+      amount: Number(repaymentAmount),
+
+      phoneNo1: customerDetails?.customersPhoneNo,
+
+      interestRate: Number(interestRate || 0),
+
       loanStartDate: loanApplicantsDetails?.loanStartDate,
+
       loanEndDate: loanApplicantsDetails?.loanEndDate,
-      repaymentDate: repaymentDate,
+
+      repaymentDate: repaymentDate || new Date().toISOString().split("T")[0],
+
       modeOfPayment: type,
-      collectedBy: collectedBy,
-      paymentDate: paymentDate,
-      name: loanApplicantsDetails?.name,
-      description: description,
+
+      collectedBy,
+
+      paymentDate: paymentDate || new Date().toISOString().split("T")[0],
+
+      name: loanApplicantsDetails?.name || customerDetails?.name,
+
+      description,
+
       firstGuarantorsName: loanApplicantsDetails?.firstGuarantorsName,
+
       firstGuarantorsPhoneNumber:
         loanApplicantsDetails?.firstGuarantorsPhoneNumber,
+
       firstGuarantorsOccupation:
         loanApplicantsDetails?.firstGuarantorsOccupation,
-      secondGuarantorsName: loanApplicantsDetails?.firstGuarantorsName,
+
+      secondGuarantorsName: loanApplicantsDetails?.secondGuarantorsName,
+
       secondGuarantorsOccupation:
         loanApplicantsDetails?.secondGuarantorsOccupation,
+
       secondGuarantorsPhoneNumber:
         loanApplicantsDetails?.secondGuarantorsPhoneNumber,
-      uploadedBy: userss.firstName + " " + userss.lastName,
+
+      uploadedBy: `${userss?.firstName || ""} ${userss?.lastName || ""}`.trim(),
     };
 
+    console.log("========== LOAN REQUEST ==========");
     console.log(formData);
+    console.log("==================================");
+
     setLoading(true);
+
     const postEndpoint =
       debitCredit === "debit" ? "/loans/withdrawals" : "/loans/deposits";
+
     const token = localStorage.getItem("token");
 
     try {
@@ -164,25 +209,36 @@ const RepayLoan = () => {
         },
       );
 
+      const data = await response.json();
+
+      console.log("========== LOAN RESPONSE ==========");
+      console.log("HTTP STATUS:", response.status);
+      console.log("BACKEND RESPONSE:", data);
+      console.log("===================================");
+
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        throw new Error(
+          data.error ||
+            data.message ||
+            `Loan request failed with status ${response.status}`,
+        );
       }
 
-      const data = await response.json();
-      console.log(data);
-      toast.success("Repayment Added");
-      // deleteLoan();
+      toast.success(data.message || "Loan repayment added successfully");
+
       setTimeout(() => {
         navigate("/loan-applicants");
       }, 1000);
     } catch (error) {
-      console.error(
-        "There was a problem with the fetch operation:",
-        error.message,
+      console.error("========== LOAN ERROR ==========");
+      console.error(error);
+      console.error("================================");
+
+      toast.error(
+        error.message || "An error occurred while processing the loan",
       );
-      toast.error("An Error Occurred", error.message);
     } finally {
-      setLoading(false); // <-- stop the loader
+      setLoading(false);
     }
   };
   useEffect(() => {
