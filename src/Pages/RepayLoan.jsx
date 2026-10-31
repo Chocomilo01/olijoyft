@@ -28,7 +28,7 @@ const RepayLoan = () => {
   // const deleteLoan = async () => {
   //   try {
   //     const response = await fetch(
-  //       `https://olijoy.onrender.com/api/v1/loans/${id}`,
+  //       `https://olijoy-bvo6.onrender.com/api/v1/loans/${id}`,
   //       {
   //         method: "DELETE",
   //         headers: {
@@ -52,7 +52,7 @@ const RepayLoan = () => {
   useEffect(() => {
     const token = localStorage.getItem("token"); // Replace 'your_token_key' with the actual key you use to store the token
 
-    fetch(`https://olijoy.onrender.com/api/v1/users/${cookies.userId}`, {
+    fetch(`https://olijoy-bvo6.onrender.com/api/v1/users/${cookies.userId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -74,7 +74,7 @@ const RepayLoan = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch(`https://olijoy.onrender.com/api/v1/loans/${id}`, {
+    fetch(`https://olijoy-bvo6.onrender.com/api/v1/loans/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -91,7 +91,7 @@ const RepayLoan = () => {
 
         // fetch customer details using the id from loanApplicantsDetails.customer
         return fetch(
-          `https://olijoy.onrender.com/api/v1/customers/${data.data.customer}`,
+          `https://olijoy-bvo6.onrender.com/api/v1/customers/${data.data.customer}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -198,7 +198,7 @@ const RepayLoan = () => {
 
     try {
       const response = await fetch(
-        `https://olijoy.onrender.com/api/v1${postEndpoint}`,
+        `https://olijoy-bvo6.onrender.com/api/v1${postEndpoint}`,
         {
           method: "POST",
           headers: {
@@ -242,7 +242,7 @@ const RepayLoan = () => {
     }
   };
   useEffect(() => {
-    fetch("https://olijoy.onrender.com/api/v1/users", {
+    fetch("https://olijoy-bvo6.onrender.com/api/v1/users", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

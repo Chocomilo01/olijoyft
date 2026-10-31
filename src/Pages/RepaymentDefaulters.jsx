@@ -10,7 +10,7 @@ const RepaymentDefaulters = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch("https://olijoy.onrender.com/api/v1/loans/defaulters", {
+    fetch("https://olijoy-bvo6.onrender.com/api/v1/loans/defaulters", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

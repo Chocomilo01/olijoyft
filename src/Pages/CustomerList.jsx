@@ -19,7 +19,7 @@ const CustomerList = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch("https://olijoy.onrender.com/api/v1/customers", {
+    fetch("https://olijoy-bvo6.onrender.com/api/v1/customers", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -68,12 +68,15 @@ const CustomerList = () => {
         const token = localStorage.getItem("token");
 
         setDeleting(true);
-        fetch(`https://olijoy.onrender.com/api/v1/customers/${customerId}`, {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
+        fetch(
+          `https://olijoy-bvo6.onrender.com/api/v1/customers/${customerId}`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
-        })
+        )
           .then((response) => {
             if (!response.ok) {
               throw new Error("Network response was not ok");

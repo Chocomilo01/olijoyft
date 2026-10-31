@@ -35,7 +35,7 @@ const CustomerProfile = () => {
         setLoading(true);
 
         const response = await fetch(
-          `https://olijoy.onrender.com/api/v1/loans/customer/${id}/loans`,
+          `https://olijoy-bvo6.onrender.com/api/v1/loans/customer/${id}/loans`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -51,7 +51,7 @@ const CustomerProfile = () => {
             const token = localStorage.getItem("token");
 
             const customerResponse = await fetch(
-              `https://olijoy.onrender.com/api/v1/customers/${customerId}`,
+              `https://olijoy-bvo6.onrender.com/api/v1/customers/${customerId}`,
               {
                 headers: {
                   Authorization: `Bearer ${token}`,
@@ -81,7 +81,7 @@ const CustomerProfile = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    fetch(`https://olijoy.onrender.com/api/v1/customers/${id}`, {
+    fetch(`https://olijoy-bvo6.onrender.com/api/v1/customers/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -104,11 +104,14 @@ const CustomerProfile = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch(`https://olijoy.onrender.com/api/v1/customers/${id}/transactions`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    fetch(
+      `https://olijoy-bvo6.onrender.com/api/v1/customers/${id}/transactions`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    })
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

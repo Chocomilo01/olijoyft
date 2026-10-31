@@ -12,7 +12,7 @@ const TransactionsByTransfer = () => {
 
   useEffect(() => {
     fetch(
-      "https://olijoy.onrender.com/api/v1/transactions/transactions/transfer",
+      "https://olijoy-bvo6.onrender.com/api/v1/transactions/transactions/transfer",
       {
         headers: {
           Authorization: `Bearer ${token}`,

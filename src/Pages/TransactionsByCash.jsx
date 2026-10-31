@@ -11,11 +11,14 @@ const TransactionsByCash = () => {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    fetch("https://olijoy.onrender.com/api/v1/transactions/transactions/cash", {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    fetch(
+      "https://olijoy-bvo6.onrender.com/api/v1/transactions/transactions/cash",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    })
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch data");

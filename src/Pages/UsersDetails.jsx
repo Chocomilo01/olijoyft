@@ -57,7 +57,7 @@ const UsersDetails = () => {
 
       // ✅ Get user details
       const userRes = await fetch(
-        `https://olijoy.onrender.com/api/v1/users/${id}`,
+        `https://olijoy-bvo6.onrender.com/api/v1/users/${id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -73,7 +73,7 @@ const UsersDetails = () => {
 
       // ✅ Fetch uploaded transactions
       const uploadedRes = await fetch(
-        `https://olijoy.onrender.com/api/v1/transactions/getAllTransactionsByUploader?uploadedBy=${encodeURIComponent(
+        `https://olijoy-bvo6.onrender.com/api/v1/transactions/getAllTransactionsByUploader?uploadedBy=${encodeURIComponent(
           firstName,
         )}&page=${page}&limit=${itemsPerPage}${dateQuery}`,
         { headers: { Authorization: `Bearer ${token}` } },
